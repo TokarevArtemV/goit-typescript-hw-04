@@ -4,7 +4,6 @@ import noop from "lodash/noop";
 type MenuIds = "first" | "second" | "last";
 type Menu = { id: MenuIds; title: string };
 
-// Додати тип Menu Selected
 type MenuSelected = {
   selectedMenu: {
     id: MenuIds;
@@ -12,15 +11,8 @@ type MenuSelected = {
 };
 
 const MenuSelectedContext = createContext<MenuSelected>({
-  selectedMenu: {
-    id: "first",
-  },
+  selectedMenu: { id: "first" },
 });
-
-// Додайте тип MenuAction
-type MenuActionContext = {
-  onSelectedMenu: () => void;
-};
 
 type MenuAction = {
   onSelectedMenu: (menu: { id: MenuIds }) => void;
@@ -31,16 +23,13 @@ const MenuActionContext = createContext<MenuAction>({
 });
 
 type PropsProvider = {
-  children: ReactNode; // Додати тип для children
+  children: ReactNode;
 };
 
-type SelectedMenu = MenuSelected["selectedMenu"];
-
 function MenuProvider({ children }: PropsProvider) {
-  // Додати тип для SelectedMenu він повинен містити { id }
-  const [selectedMenu, setSelectedMenu] = useState<SelectedMenu>({
-    id: "first",
-  });
+  const [selectedMenu, setSelectedMenu] = useState<
+    MenuSelected["selectedMenu"]
+  >({ id: "first" });
 
   const menuContextAction = useMemo(
     () => ({
@@ -66,7 +55,7 @@ function MenuProvider({ children }: PropsProvider) {
 }
 
 type PropsMenu = {
-  menus: Menu[]; // Додайте вірний тип для меню
+  menus: Menu[];
 };
 
 function MenuComponent({ menus }: PropsMenu) {
@@ -75,7 +64,7 @@ function MenuComponent({ menus }: PropsMenu) {
 
   return (
     <>
-      {menus.map((menu: Menu) => (
+      {menus.map((menu) => (
         <div key={menu.id} onClick={() => onSelectedMenu({ id: menu.id })}>
           {menu.title}{" "}
           {selectedMenu.id === menu.id ? "Selected" : "Not selected"}
